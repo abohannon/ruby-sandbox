@@ -15,7 +15,11 @@ module Mastermind
     end
 
     def set_guess(round, guess)
+      rounds[round - 1][:guess] = guess
+    end
 
+    def set_key(round, key)
+      rounds[round - 1][:key] = key
     end
 
     private

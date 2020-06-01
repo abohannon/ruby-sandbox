@@ -18,7 +18,8 @@ module Mastermind
         end
       end
 
-      key
+      # shuffle the key result so there's no pattern in the response
+      key.shuffle!
     end
   end
 end
