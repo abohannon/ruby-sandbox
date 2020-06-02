@@ -7,9 +7,9 @@ module Mastermind
       @guesses = []
     end
 
-    def make_guess(colors)
-      @guesses << colors
-      colors
+    def make_guess(guess)
+      @guesses << guess
+      guess
     end
   end
 end
