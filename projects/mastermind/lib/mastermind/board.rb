@@ -1,8 +1,9 @@
 module Mastermind
   class Board
-    attr_reader :rounds, :code, :current_round
+    attr_reader :code
+    attr_accessor :current_round, :rounds
 
-    def initialize(code = Codemaker.new)
+    def initialize(code = Codemaker.new.code)
       @rounds = default_rounds
       @code = code
       @current_round = 0
@@ -27,11 +28,10 @@ module Mastermind
 
     def check_guess(guess)
       key = []
-
       guess.each_with_index do |color, i|
         if code[i] == color
           key << :black
-        elsif code.include?(color.to_sym)
+        elsif code.include?(color)
           key << :white
         end
       end
@@ -41,17 +41,18 @@ module Mastermind
     end
 
     def next_round
+      self.current_round += 1
       rounds << { guess: [], key: [] }
-      board.formatted_board
     end
 
     def correct_guess?(key)
-      key.any? && key.all? { |color| color == :black }
+      key.length == 4 && key.all? { |color| color == :black }
     end
 
     def game_over(key = [])
       return :winner if correct_guess?(key)
       return :loser if current_round > 9
+      return false
     end
 
     private

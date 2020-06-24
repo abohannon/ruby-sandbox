@@ -35,22 +35,31 @@ module Mastermind
       end
     end
 
+    context "#next_round" do
+      it "increments current_round and adds an empty round" do
+        board.next_round
+        # expect(board.current_round).to eq(1)
+        puts board.rounds
+        expect(board.rounds.length).to eq(2)
+      end
+    end
+
     context "#correct_guess?" do
       it "returns true if all keys are :black" do
-        keys = Array.new(4) { :black }
-        expect(board.correct_guess?(keys)).to eq(true)
+        key = Array.new(4) { :black }
+        expect(board.correct_guess?(key)).to eq(true)
       end
 
       it "returns false if the key array contains :white" do
-        keys = [:black, :white, :black, :black]
-        expect(board.correct_guess?(keys)).to eq(false)
+        key = [:black, :white, :black, :black]
+        expect(board.correct_guess?(key)).to eq(false)
       end
     end
 
     context "#game_over" do
       it "returns :winner if correct_guess? returns true" do
-        keys = Array.new(4) { :black }
-        expect(board.game_over(keys)).to eq(:winner)
+        key = Array.new(4) { :black }
+        expect(board.game_over(key)).to eq(:winner)
       end
 
       it "returns :loser if current_round is larger than max rounds of 9 (indicating player did not guess the code correctly)" do
