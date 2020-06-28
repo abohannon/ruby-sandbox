@@ -37,16 +37,29 @@ module BinarySearchTree
       node
     end
 
-    def insert(value)
+    def insert(node, value)
+      if (value > node.value)
+        if (node.right)
+          insert(node.right, value)
+        else
+          node.right = Node.new(value)
+        end
+      else
+        if (node.left)
+          insert(node.left, value)
+        else
+          node.left = Node.new(value)
+        end
+      end
     end
 
     def find(value, node = root)
       return nil if !node
+      return node if node.value == value
 
-      if node.value == value
-        node
-      else
+      if value < node.value
         find(value, node.left)
+      else
         find(value, node.right)
       end
     end
@@ -56,12 +69,21 @@ end
 
 
 rand_values = Array.new(7) { rand(1..100) }
-values = [2, 100, 6, 87, 0, 3, 66]
+values = [1,2,3,4,5,6,7]
 tree = BinarySearchTree::Tree.new(values)
 
-p tree.values
-p tree.root
+root = tree.root
 
 p "Find:"
-p tree.find(87)
+p tree.find(6)
+
+
+p "Insert"
+p tree.insert(root, 8)
+p tree.insert(root, 8)
+p tree.insert(root, 0)
+p tree.insert(root, 20)
+p tree.insert(root, 10)
+
+p root
 
