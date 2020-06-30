@@ -102,6 +102,17 @@ module BinarySearchTree
         find(node.right, value)
       end
     end
+
+    def level_order
+      q = [root]
+
+      while !q.empty? do
+        current = q.shift
+        yield(current) if block_given?
+        q << current.left if current.left
+        q << current.right if current.right
+      end
+    end
   end
 end
 
@@ -113,8 +124,10 @@ tree = BinarySearchTree::Tree.new(values)
 
 root = tree.root
 
+tree.level_order do |node|
+  p "Current node: #{node.value}"
+end
 
-p tree.delete(root, 2)
 p "Find:"
 tree.find(root, 6)
 
