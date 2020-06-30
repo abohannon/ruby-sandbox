@@ -2,8 +2,7 @@ module BinarySearchTree
   class Node
     include Comparable
 
-    attr_accessor :left, :right
-    attr_reader :value
+    attr_accessor :value, :left, :right
 
     def initialize(value = nil)
       @value = value
@@ -53,14 +52,54 @@ module BinarySearchTree
       end
     end
 
-    def find(value, node = root)
+    def min_value_node(node)
+      current = node
+
+      while current.left do
+        current = current.left
+      end
+
+      current
+    end
+
+    def delete(node, value)
+      return nil if !node
+
+      # Handle deletion of leaf nodes
+      if value < node.value
+        node.left = delete(node.left, value)
+      elsif value > node.value
+        node.right = delete(node.right, value)
+      else
+        # Handle deletion of root node
+        if !node.left
+          temp = node.right
+          node = nil
+          return temp
+        elsif !node.right
+          temp = node.left
+          node = nil
+          return temp
+        end
+
+        temp = min_value_node(node.right)
+
+        node.value = temp.value
+
+        node.right = delete(node.right, temp.value)
+      end
+
+      node
+    end
+
+    def find(node, value)
       return nil if !node
       return node if node.value == value
 
       if value < node.value
-        find(value, node.left)
+        find(node.left, value)
       else
-        find(value, node.right)
+        find(node.right, value)
       end
     end
   end
@@ -74,16 +113,17 @@ tree = BinarySearchTree::Tree.new(values)
 
 root = tree.root
 
+
+p tree.delete(root, 2)
 p "Find:"
-p tree.find(6)
+tree.find(root, 6)
 
 
 p "Insert"
-p tree.insert(root, 8)
-p tree.insert(root, 8)
-p tree.insert(root, 0)
-p tree.insert(root, 20)
-p tree.insert(root, 10)
+tree.insert(root, 8)
+tree.insert(root, 8)
+tree.insert(root, 0)
+tree.insert(root, 20)
+tree.insert(root, 10)
 
-p root
 
