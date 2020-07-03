@@ -105,13 +105,17 @@ module BinarySearchTree
 
     def level_order
       q = [root]
+      values_arr = []
 
       while !q.empty? do
         current = q.shift
+        values_arr << current.value
         yield(current) if block_given?
         q << current.left if current.left
         q << current.right if current.right
       end
+
+      values_arr unless block_given?
     end
 
     def inorder
@@ -210,38 +214,40 @@ module BinarySearchTree
 
       difference <= 1 ? true : false
     end
+
+    def rebalance!
+      p "Rebalancing tree..."
+      current_values = level_order.sort.uniq
+      @root = build_tree(current_values, 0, current_values.length - 1)
+      p "Tree has been rebalanced: #{balanced?}"
+    end
   end
 end
 
 
 
-rand_values = Array.new(7) { rand(1..100) }
-values = [1,2,3,4,5,6,7]
-tree = BinarySearchTree::Tree.new(values)
-
+rand_values = Array.new(15) { rand(1..100) }
+# values = [1,2,3,4,5,6,7]
+tree = BinarySearchTree::Tree.new(rand_values)
 root = tree.root
 p "Is the tree balanced? #{tree.balanced?}"
 p "Tree depth is: #{tree.depth(root)}"
 
-# tree.postorder do |node|
-#   p "Postorder current node: #{node.value}"
-# end
+tree.level_order do |node|
+  p "Level order current node: #{node.value}"
+end
 
-# tree.preorder do |node|
-#   p "Preorder current node: #{node.value}"
-# end
+tree.preorder do |node|
+  p "Preorder current node: #{node.value}"
+end
 
-# tree.inorder do |node|
-#   p "Inorder current node: #{node.value}"
-# end
+tree.postorder do |node|
+  p "Postorder current node: #{node.value}"
+end
 
-# tree.level_order do |node|
-#   p "Current node: #{node.value}"
-# end
-
-# p "Find:"
-# tree.find(root, 6)
-
+tree.inorder do |node|
+  p "Inorder current node: #{node.value}"
+end
 
 p "Inserting nodes..."
 tree.insert(root, 8)
@@ -251,5 +257,24 @@ tree.insert(root, 20)
 tree.insert(root, 10)
 
 p "Is the tree balanced? #{tree.balanced?}"
+
+tree.rebalance!
+
+tree.level_order do |node|
+  p "Level order current node: #{node.value}"
+end
+
+tree.preorder do |node|
+  p "Preorder current node: #{node.value}"
+end
+
+tree.postorder do |node|
+  p "Postorder current node: #{node.value}"
+end
+
+tree.inorder do |node|
+  p "Inorder current node: #{node.value}"
+end
+
 
 
