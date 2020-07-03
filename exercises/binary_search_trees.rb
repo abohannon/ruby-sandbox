@@ -113,9 +113,7 @@ module BinarySearchTree
         q << current.right if current.right
       end
     end
-    #[4,2,1]
-    # [4,2] => 1
-    # [4] => 2
+
     def inorder
       return nil if !root
       stack = []
@@ -141,6 +139,58 @@ module BinarySearchTree
 
       value_arr if !block_given?
     end
+
+    def preorder
+      return nil if !root
+      stack = [root]
+      values_arr = []
+
+      while !stack.empty? do
+        current = stack.pop()
+
+        yield(current) if block_given?
+        values_arr << current.value
+
+        if current.right
+          stack << current.right
+        end
+
+        if current.left
+          stack << current.left
+        end
+      end
+
+      values_arr if !block_given?
+    end
+
+    def postorder
+      return nil if !root
+      stack_a = [root]
+      stack_b = []
+      values_arr = []
+
+      while !stack_a.empty? do
+        current = stack_a.pop()
+        stack_b << current
+        values_arr << current.value
+
+        if current.left
+          stack_a << current.left
+        end
+
+        if current.right
+          stack_a << current.right
+        end
+      end
+
+      if block_given?
+        while !stack_b.empty?
+          yield(stack_b.pop())
+        end
+      end
+
+     values_arr.reverse() unless block_given?
+    end
   end
 end
 
@@ -152,9 +202,19 @@ tree = BinarySearchTree::Tree.new(values)
 
 root = tree.root
 
-tree.inorder do |node|
-  p "Inorder current node: #{node.value}"
+
+
+tree.postorder do |node|
+  p "Postorder current node: #{node.value}"
 end
+
+# tree.preorder do |node|
+#   p "Preorder current node: #{node.value}"
+# end
+
+# tree.inorder do |node|
+#   p "Inorder current node: #{node.value}"
+# end
 
 # tree.level_order do |node|
 #   p "Current node: #{node.value}"
