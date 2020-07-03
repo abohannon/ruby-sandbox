@@ -191,6 +191,25 @@ module BinarySearchTree
 
      values_arr.reverse() unless block_given?
     end
+
+    def depth(node)
+      if !node
+        return 0
+      end
+
+      left_depth = depth(node.left)
+      right_depth = depth(node.right)
+
+      return [left_depth, right_depth].max + 1
+    end
+
+    def balanced?
+      left = depth(root.left)
+      right = depth(root.right)
+      difference = (left - right).abs()
+
+      difference <= 1 ? true : false
+    end
   end
 end
 
@@ -201,12 +220,12 @@ values = [1,2,3,4,5,6,7]
 tree = BinarySearchTree::Tree.new(values)
 
 root = tree.root
+p "Is the tree balanced? #{tree.balanced?}"
+p "Tree depth is: #{tree.depth(root)}"
 
-
-
-tree.postorder do |node|
-  p "Postorder current node: #{node.value}"
-end
+# tree.postorder do |node|
+#   p "Postorder current node: #{node.value}"
+# end
 
 # tree.preorder do |node|
 #   p "Preorder current node: #{node.value}"
@@ -224,11 +243,13 @@ end
 # tree.find(root, 6)
 
 
-# p "Insert"
-# tree.insert(root, 8)
-# tree.insert(root, 8)
-# tree.insert(root, 0)
-# tree.insert(root, 20)
-# tree.insert(root, 10)
+p "Inserting nodes..."
+tree.insert(root, 8)
+tree.insert(root, 8)
+tree.insert(root, 0)
+tree.insert(root, 20)
+tree.insert(root, 10)
+
+p "Is the tree balanced? #{tree.balanced?}"
 
 
