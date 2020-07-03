@@ -113,6 +113,34 @@ module BinarySearchTree
         q << current.right if current.right
       end
     end
+    #[4,2,1]
+    # [4,2] => 1
+    # [4] => 2
+    def inorder
+      return nil if !root
+      stack = []
+      value_arr = []
+      current = root
+
+      while !current.nil? || !stack.empty? do
+        while !current.nil? do
+          stack << current
+          current = current.left
+        end
+
+        current = stack.pop()
+
+        if block_given?
+          yield(current)
+        else
+          value_arr << current.value
+        end
+
+        current = current.right
+      end
+
+      value_arr if !block_given?
+    end
   end
 end
 
@@ -124,19 +152,23 @@ tree = BinarySearchTree::Tree.new(values)
 
 root = tree.root
 
-tree.level_order do |node|
-  p "Current node: #{node.value}"
+tree.inorder do |node|
+  p "Inorder current node: #{node.value}"
 end
 
-p "Find:"
-tree.find(root, 6)
+# tree.level_order do |node|
+#   p "Current node: #{node.value}"
+# end
+
+# p "Find:"
+# tree.find(root, 6)
 
 
-p "Insert"
-tree.insert(root, 8)
-tree.insert(root, 8)
-tree.insert(root, 0)
-tree.insert(root, 20)
-tree.insert(root, 10)
+# p "Insert"
+# tree.insert(root, 8)
+# tree.insert(root, 8)
+# tree.insert(root, 0)
+# tree.insert(root, 20)
+# tree.insert(root, 10)
 
 
